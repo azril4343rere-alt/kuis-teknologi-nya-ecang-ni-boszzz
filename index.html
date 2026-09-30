@@ -1,0 +1,911 @@
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Teknologi & AI - 40 Soal Interaktif</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+    <!-- Navbar Header -->
+    <header class="bg-slate-800/80 backdrop-blur-md border-b border-slate-700/60 sticky top-0 z-40">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 text-white w-10 h-10 rounded-xl flex items-center justify-center font-bold shadow-lg shadow-indigo-500/30">
+                    <i class="fa-solid fa-brain text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg text-white tracking-tight leading-tight">Tech & AI Quiz</h1>
+                    <p class="text-xs text-slate-400 font-medium">40 Soal Pilihan Ganda</p>
+                </div>
+            </div>
+
+            <!-- Quiz Timer (Visible when quiz is running) -->
+            <div id="timer-badge" class="hidden bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg flex items-center gap-2 text-amber-400 font-mono text-sm font-semibold">
+                <i class="fa-regular fa-clock animate-pulse"></i>
+                <span id="timer-text">40:00</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto w-full px-4 py-6 flex-1">
+
+        <!-- 1. WELCOME SCREEN -->
+        <section id="welcome-screen" class="bg-slate-800 border border-slate-700/70 rounded-2xl p-6 sm:p-10 shadow-2xl text-center my-auto">
+            <div class="w-20 h-20 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-3xl flex items-center justify-center mx-auto mb-6 text-4xl">
+                <i class="fa-solid fa-microchip"></i>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-3">Uji Pengetahuan Teknologi & AI</h2>
+            <p class="text-slate-300 max-w-xl mx-auto text-sm sm:text-base mb-8 leading-relaxed">
+                Uji sejauh mana pemahamanmu tentang <span class="text-indigo-400 font-semibold">Artificial Intelligence, Machine Learning, Generative AI, Cloud Computing, Cyber Security</span>, dan tren teknologi masa kini!
+            </p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto mb-8 text-left text-xs sm:text-sm">
+                <div class="bg-slate-900/60 p-3.5 rounded-xl border border-slate-700/50 flex items-center gap-3">
+                    <i class="fa-solid fa-list-check text-indigo-400 text-lg"></i>
+                    <div>
+                        <p class="text-slate-400 font-medium">Jumlah</p>
+                        <p class="font-bold text-white">40 Soal</p>
+                    </div>
+                </div>
+                <div class="bg-slate-900/60 p-3.5 rounded-xl border border-slate-700/50 flex items-center gap-3">
+                    <i class="fa-regular fa-clock text-amber-400 text-lg"></i>
+                    <div>
+                        <p class="text-slate-400 font-medium">Waktu</p>
+                        <p class="font-bold text-white">40 Menit</p>
+                    </div>
+                </div>
+                <div class="bg-slate-900/60 p-3.5 rounded-xl border border-slate-700/50 flex items-center gap-3">
+                    <i class="fa-solid fa-trophy text-emerald-400 text-lg"></i>
+                    <div>
+                        <p class="text-slate-400 font-medium">KKM</p>
+                        <p class="font-bold text-white">75% Skor</p>
+                    </div>
+                </div>
+                <div class="bg-slate-900/60 p-3.5 rounded-xl border border-slate-700/50 flex items-center gap-3">
+                    <i class="fa-solid fa-book-open text-sky-400 text-lg"></i>
+                    <div>
+                        <p class="text-slate-400 font-medium">Fitur</p>
+                        <p class="font-bold text-white">Pembahasan</p>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="startQuiz()" class="w-full sm:w-auto px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/30 transition-all transform active:scale-95 inline-flex items-center justify-center gap-2 text-base">
+                <i class="fa-solid fa-play"></i> Mulai Kuis Sekarang
+            </button>
+        </section>
+
+        <!-- 2. QUIZ SCREEN -->
+        <section id="quiz-screen" class="hidden">
+            <!-- Progress Bar & Question Counter -->
+            <div class="mb-6">
+                <div class="flex items-center justify-between text-xs sm:text-sm font-semibold mb-2 text-slate-400">
+                    <span id="question-counter">Soal 1 dari 40</span>
+                    <button onclick="toggleGridModal()" class="text-indigo-400 hover:text-indigo-300 flex items-center gap-1.5 bg-slate-800 px-3 py-1 rounded-lg border border-slate-700">
+                        <i class="fa-solid fa-border-all"></i> Navigasi Soal
+                    </button>
+                </div>
+                <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden border border-slate-700/50">
+                    <div id="progress-bar" class="bg-indigo-500 h-full transition-all duration-300 w-0"></div>
+                </div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-5 sm:p-8 shadow-xl mb-6 relative">
+                <div class="flex items-center justify-between mb-4">
+                    <span id="question-category" class="text-xs font-semibold px-3 py-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full">
+                        Kategori Soal
+                    </span>
+                    <button id="flag-btn" onclick="toggleFlagCurrentQuestion()" class="text-xs font-medium px-3 py-1 rounded-lg border transition-all flex items-center gap-1.5 border-slate-700 text-slate-400 hover:text-amber-400">
+                        <i class="fa-regular fa-bookmark"></i> Ragu-ragu
+                    </button>
+                </div>
+
+                <!-- Question Text -->
+                <h3 id="question-text" class="text-base sm:text-lg font-bold text-white mb-6 leading-relaxed">
+                    Loading soal...
+                </h3>
+
+                <!-- Options List -->
+                <div id="options-container" class="space-y-3">
+                    <!-- Options injected dynamically by JS -->
+                </div>
+            </div>
+
+            <!-- Bottom Navigation Controls -->
+            <div class="flex items-center justify-between gap-3">
+                <button id="prev-btn" onclick="prevQuestion()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-arrow-left"></i> Sebelum
+                </button>
+
+                <div class="flex items-center gap-2">
+                    <button id="next-btn" onclick="nextQuestion()" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl shadow-md transition-all flex items-center gap-2 text-sm">
+                        Lanjut <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <button id="submit-btn" onclick="confirmSubmitQuiz()" class="hidden px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl shadow-md transition-all flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-check-double"></i> Selesai
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. RESULT SCREEN -->
+        <section id="result-screen" class="hidden">
+            <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-6 sm:p-10 shadow-2xl mb-8 text-center">
+                <div class="inline-flex p-4 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-3xl mb-4">
+                    <i class="fa-solid fa-award"></i>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-1">Hasil Quiz Kamu</h2>
+                <p class="text-slate-400 text-sm mb-6">Berikut adalah rangkuman performa kamu</p>
+
+                <!-- Score Badge -->
+                <div class="max-w-xs mx-auto bg-slate-900/80 border border-slate-700 rounded-2xl p-6 mb-6">
+                    <div id="final-score" class="text-5xl font-extrabold text-indigo-400 mb-1">0%</div>
+                    <p id="result-grade" class="text-sm font-semibold text-slate-300">Skor Kamu: 0 / 40</p>
+                </div>
+
+                <p id="result-message" class="text-slate-300 text-sm max-w-md mx-auto mb-8 font-medium">
+                    Pesan hasil quiz.
+                </p>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-3 gap-3 max-w-md mx-auto text-center mb-8">
+                    <div class="bg-emerald-950/40 border border-emerald-800/50 p-3 rounded-xl">
+                        <p class="text-xs text-emerald-400 font-semibold mb-1">Benar</p>
+                        <p id="stat-correct" class="text-xl font-bold text-emerald-300">0</p>
+                    </div>
+                    <div class="bg-rose-950/40 border border-rose-800/50 p-3 rounded-xl">
+                        <p class="text-xs text-rose-400 font-semibold mb-1">Salah</p>
+                        <p id="stat-incorrect" class="text-xl font-bold text-rose-300">0</p>
+                    </div>
+                    <div class="bg-amber-950/40 border border-amber-800/50 p-3 rounded-xl">
+                        <p class="text-xs text-amber-400 font-semibold mb-1">Kosong</p>
+                        <p id="stat-unanswered" class="text-xl font-bold text-amber-300">0</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-3">
+                    <button onclick="restartQuiz()" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg transition-all text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-rotate-right"></i> Coba Lagi
+                    </button>
+                    <button onclick="showReviewMode()" class="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl shadow-md transition-all text-sm flex items-center gap-2 border border-slate-600">
+                        <i class="fa-solid fa-file-lines"></i> Lihat Pembahasan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Review Container -->
+            <div id="review-container" class="hidden space-y-6">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-book-open text-indigo-400"></i> Pembahasan Soal
+                </h3>
+                <div id="review-list" class="space-y-4">
+                    <!-- Dynamic review cards -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Navigation Soal Grid -->
+    <div id="grid-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative max-h-[85vh] flex flex-col">
+            <div class="flex items-center justify-between mb-4 border-b border-slate-700 pb-3">
+                <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                    <i class="fa-solid fa-border-all text-indigo-400"></i> Navigasi Soal
+                </h3>
+                <button onclick="toggleGridModal()" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <p class="text-xs text-slate-400 mb-4">Klik nomor soal untuk berpindah dengan cepat:</p>
+
+            <div id="grid-buttons" class="grid grid-cols-5 sm:grid-cols-8 gap-2 overflow-y-auto custom-scrollbar p-1 flex-1">
+                <!-- Injected via JS -->
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-700 flex items-center justify-between text-xs text-slate-400">
+                <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-indigo-600 inline-block"></span> Dijawab</div>
+                <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-slate-700 inline-block"></span> Belum</div>
+                <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-amber-500 inline-block"></span> Ragu-ragu</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-4 text-center text-xs text-slate-500">
+        <p>Aplikasi Quiz Teknologi & AI © 2026. Dibuat interaktif dengan HTML, Tailwind CSS & JavaScript.</p>
+    </footer>
+
+    <!-- Quiz Logic JavaScript -->
+    <script>
+        // 40 SOAL TEKNOLOGI & AI
+        const quizData = [
+            {
+                id: 1,
+                category: "Dasar AI",
+                question: "Apa kepanjangan dari AI dalam dunia teknologi modern?",
+                options: ["Artificial Intelligence", "Automatic Integration", "Advanced Information", "Automated Interface"],
+                correct: 0,
+                explanation: "AI singkatan dari Artificial Intelligence (Kecerdasan Buatan), merujuk pada simulasi kecerdasan manusia yang diimplementasikan pada sistem komputer."
+            },
+            {
+                id: 2,
+                category: "Machine Learning",
+                question: "Cabang AI yang berfokus pada kemampuan mesin untuk belajar otomatis dari data tanpa diprogram secara eksplisit adalah...",
+                options: ["Machine Learning", "Data Mining", "Web Development", "Cloud Computing"],
+                correct: 0,
+                explanation: "Machine Learning (ML) memicu sistem komputer untuk belajar dan meningkatkan performa secara independen dari analisis data."
+            },
+            {
+                id: 3,
+                category: "Generative AI",
+                question: "Model AI seperti ChatGPT, Claude, dan Gemini termasuk dalam kategori jenis AI...",
+                options: ["Generative AI / LLM", "Expert Systems", "Rule-based System", "Computer Vision"],
+                correct: 0,
+                explanation: "ChatGPT dan Gemini menggunakan model bahasa besar (Large Language Models) yang tergolong dalam Generative AI untuk menghasilkan teks baru."
+            },
+            {
+                id: 4,
+                category: "Machine Learning",
+                question: "Algoritma Machine Learning yang membutuhkan data berlabel (labeled data) dalam proses pelatihannya dinamakan...",
+                options: ["Supervised Learning", "Unsupervised Learning", "Reinforcement Learning", "Semi-Unsupervised Learning"],
+                correct: 0,
+                explanation: "Supervised Learning dilatih menggunakan dataset yang memiliki pasangan input dan kunci jawaban (label) yang benar."
+            },
+            {
+                id: 5,
+                category: "Hardware",
+                question: "Komponen perangkat keras yang paling optimal untuk pemrosesan paralel dalam pelatihan model Deep Learning skala besar adalah...",
+                options: ["GPU / TPU", "Sound Card", "Network Interface Card", "Hard Disk Drive (HDD)"],
+                correct: 0,
+                explanation: "GPU (Graphics Processing Unit) dan TPU (Tensor Processing Unit) memiliki ribuan core paralel yang efisien untuk perkalian matriks AI."
+            },
+            {
+                id: 6,
+                category: "Machine Learning",
+                question: "Istilah 'Overfitting' dalam pembuatan model AI merujuk pada kondisi...",
+                options: [
+                    "Model sangat baik pada data latih tetapi buruk pada data baru",
+                    "Model gagal mempelajari data latih maupun data uji",
+                    "Proses mempercepat pelatihan model AI",
+                    "Teknik menggabungkan beberapa model AI"
+                ],
+                correct: 0,
+                explanation: "Overfitting terjadi ketika model terlalu menghafal detail dan noise data latih sehingga kehilangan kemampuan generalisasi data baru."
+            },
+            {
+                id: 7,
+                category: "Deep Learning",
+                question: "Arsitektur jaring saraf (Neural Network) yang memicu revolusi LLM saat ini melalui mekanisme Self-Attention adalah...",
+                options: ["Transformer", "Convolutional Neural Network (CNN)", "Recurrent Neural Network (RNN)", "Multilayer Perceptron"],
+                correct: 0,
+                explanation: "Arsitektur Transformer diperkenalkan oleh Google pada paper 'Attention Is All You Need' (2017) dan menjadi fondasi utama LLM."
+            },
+            {
+                id: 8,
+                category: "Generative AI",
+                question: "Istilah untuk fenomena saat model AI memberikan jawaban yang meyakinkan namun sebenarnya keliru atau fiktif dinamakan...",
+                options: ["Hallucination (Halusinasi)", "Overfitting", "Gradient Descent", "Underfitting"],
+                correct: 0,
+                explanation: "Halusinasi AI terjadi ketika LLM merangkai kalimat yang terdengar masuk akal tetapi secara ilmiah/faktual salah."
+            },
+            {
+                id: 9,
+                category: "Computer Vision",
+                question: "Jenis Neural Network yang paling efektif dan standar digunakan dalam tugas pengenalan gambar (Computer Vision) adalah...",
+                options: ["CNN (Convolutional Neural Network)", "RNN (Recurrent Neural Network)", "GAN (Generative Adversarial Network)", "ANN Biasa"],
+                correct: 0,
+                explanation: "CNN bekerja mengekstrak fitur spasial dari piksel gambar menggunakan operasi konvolusi."
+            },
+            {
+                id: 10,
+                category: "AI Training",
+                question: "Proses penyesuaian model AI pra-latih (pre-trained) menggunakan dataset spesifik agar mahir pada tugas tertentu dinamakan...",
+                options: ["Fine-Tuning", "Prompt Engineering", "Data Scraping", "Web Crawling"],
+                correct: 0,
+                explanation: "Fine-Tuning melatih kembali bagian bobot model AI dasar menggunakan sampel data domain khusus (misal medis/hukum)."
+            },
+            {
+                id: 11,
+                category: "Generative AI",
+                question: "Teknik merancang instruksi input teks yang efektif agar model Generative AI menghasilkan respons terbaik dinamakan...",
+                options: ["Prompt Engineering", "Reverse Engineering", "Software Engineering", "Social Engineering"],
+                correct: 0,
+                explanation: "Prompt Engineering adalah teknik memformulasi teks perintah agar AI memberikan jawaban akurat dan relevan."
+            },
+            {
+                id: 12,
+                category: "Deep Learning",
+                question: "Peran komponen 'Discriminator' dalam arsitektur GAN (Generative Adversarial Network) adalah...",
+                options: [
+                    "Membedakan apakah sampel data buatan Generator asli atau palsu",
+                    "Membuat gambar atau sampel data sintetis baru",
+                    "Menghitung kecepatan koneksi internet",
+                    "Mengompresi ukuran file gambar"
+                ],
+                correct: 0,
+                explanation: "GAN terdiri dari Generator (pembuat sampel) dan Discriminator (penilai keaslian sampel)."
+            },
+            {
+                id: 13,
+                category: "Generative AI",
+                question: "Istilah 'RAG' dalam pengembangan aplikasi LLM modern merupakan singkatan dari...",
+                options: ["Retrieval-Augmented Generation", "Rapid Automated Graphics", "Recurrent AI Guidance", "Random Algorithmic Generation"],
+                correct: 0,
+                explanation: "RAG menggabungkan metode pencarian basis dokumen eksternal dengan kemampuan generasi teks dari LLM."
+            },
+            {
+                id: 14,
+                category: "Model AI Open Source",
+                question: "Manakah keluarga model AI bersifat Open Weight/Open Source populer yang dikembangkan oleh Meta?",
+                options: ["Llama", "GPT-4o", "Claude 3.5 Sonnet", "Gemini 1.5 Pro"],
+                correct: 0,
+                explanation: "Llama (Large Language Model Meta AI) adalah jajaran model LLM terbuka yang dikembangkan Meta."
+            },
+            {
+                id: 15,
+                category: "Machine Learning",
+                question: "Metode pembelajaran AI berdasarkan sistem akumulasi Reward (hadiah) dan Penalty (hukuman) dari aksi di lingkungan dinamakan...",
+                options: ["Reinforcement Learning", "Unsupervised Learning", "Deep Supervised Learning", "Zero-Shot Learning"],
+                correct: 0,
+                explanation: "Reinforcement Learning (RL) melatih agen mandiri (seperti AI catur atau robot) melalui skema trial & error ber-reward."
+            },
+            {
+                id: 16,
+                category: "Deep Learning",
+                question: "Fungsi aktivasi dalam Neural Network yang mengubah semua angka negatif menjadi 0 dan mempertahankan angka positif adalah...",
+                options: ["ReLU (Rectified Linear Unit)", "Sigmoid", "Softmax", "Tanh"],
+                correct: 0,
+                explanation: "ReLU dirumuskan f(x) = max(0, x), sangat populer karena komputasinya efisien dan mencegah masalah vanishing gradient."
+            },
+            {
+                id: 17,
+                category: "Sejarah AI",
+                question: "Uji coba klasik yang diusulkan Alan Turing pada tahun 1950 untuk menguji apakah mesin memiliki kecerdasan setara manusia disebut...",
+                options: ["Turing Test", "Voight-Kampff Test", "Stanford-Binet Test", "Captcha Test"],
+                correct: 0,
+                explanation: "Uji Turing (Turing Test) mengevaluasi apakah manusia dapat membedakan percakapan antara manusia lain atau komputer."
+            },
+            {
+                id: 18,
+                category: "Cloud & IoT",
+                question: "Konsep komputasi di mana pemrosesan data dilakukan langsung di dekat sumber data (lokal/sensor IoT) alih-alih server cloud dinamakan...",
+                options: ["Edge Computing", "Quantum Computing", "Grid Computing", "Serverless Computing"],
+                correct: 0,
+                explanation: "Edge Computing memproses data di ujung jaringan lokal untuk memangkas latensi transmisi ke cloud pusat."
+            },
+            {
+                id: 19,
+                category: "Pemrograman AI",
+                question: "Bahasa pemrograman yang paling dominan digunakan dalam ekosistem Machine Learning & Data Science saat ini adalah...",
+                options: ["Python", "Java", "PHP", "C++"],
+                correct: 0,
+                explanation: "Python populer berkat pustaka lengkap seperti PyTorch, TensorFlow, Scikit-Learn, Pandas, dan NumPy."
+            },
+            {
+                id: 20,
+                category: "AI Security",
+                question: "Serangan siber berupa manipulasi input prompt untuk memaksa AI mengabaikan batasan etisnya dinamakan...",
+                options: ["Prompt Injection / Jailbreaking", "SQL Injection", "Cross-Site Scripting (XSS)", "Phishing"],
+                correct: 0,
+                explanation: "Prompt Injection atau Jailbreaking mengeksploitasi celah konteks instruksi agar LLM mau memberikan respons terlarang."
+            },
+            {
+                id: 21,
+                category: "Cloud Computing",
+                question: "Layanan cloud yang menyediakan sumber daya infrastruktur fisik seperti Virtual Machine, Storage, dan Network disebut...",
+                options: ["IaaS (Infrastructure as a Service)", "SaaS (Software as a Service)", "PaaS (Platform as a Service)", "FaaS (Function as a Service)"],
+                correct: 0,
+                explanation: "IaaS menyewakan fondasi komputasi mentah (seperti AWS EC2 atau Google Compute Engine)."
+            },
+            {
+                id: 22,
+                category: "AI Database",
+                question: "Jenis basis data yang dioptimalkan khusus untuk menyimpan data vektor berdimensi tinggi guna pencarian kemiripan AI adalah...",
+                options: ["Vector Database", "Relational Database (SQL)", "Spreadsheet CSV", "Key-Value Store Sederhana"],
+                correct: 0,
+                explanation: "Vector Database (seperti Pinecone, Milvus, Chroma) dirancang khusus untuk menyimpan embedding vektor AI."
+            },
+            {
+                id: 23,
+                category: "Cyber Security",
+                question: "Celah keamanan perangkat lunak yang baru ditemukan dan belum memiliki perbaikan (patch) resmi dari pengembang dinamakan...",
+                options: ["Zero-Day Vulnerability", "Brute-Force Vulnerability", "Ransomware Bug", "Trojan Horse"],
+                correct: 0,
+                explanation: "Zero-Day adalah kerentanan yang dimanfaatkan penyerang sebelum pengembang sempat membuat patch pengaman."
+            },
+            {
+                id: 24,
+                category: "Blockchain",
+                question: "Arsitektur buku besar digital terdesentralisasi yang menjadi fondasi cryptocurrency dan Smart Contracts dinamakan...",
+                options: ["Blockchain", "Peer-to-Peer FTP", "Centralized Database", "Domain Name System (DNS)"],
+                correct: 0,
+                explanation: "Blockchain menyimpan catatan transaksi dalam blok-blok terenkripsi yang tersebar di jaringan P2P."
+            },
+            {
+                id: 25,
+                category: "Jaringan & Web",
+                question: "Apa fungsi utama protokol HTTPS dibanding HTTP biasa pada alamat situs web?",
+                options: [
+                    "Menyediakan enkripsi SSL/TLS untuk keamanan transmisi data",
+                    "Mempercepat proses unduhan gambar",
+                    "Mengompres ukuran HTML",
+                    "Menghilangkan iklan otomatis"
+                ],
+                correct: 0,
+                explanation: "HTTPS mengamankan data pengguna (seperti kata sandi & kartu kredit) dengan enkripsi TLS/SSL."
+            },
+            {
+                id: 26,
+                category: "Masa Depan Komputasi",
+                question: "Teknologi komputasi yang memanfaatkan prinsip mekanika kuantum seperti Superposisi dan Entanglement adalah...",
+                options: ["Quantum Computing", "Optical Computing", "DNA Computing", "Neuromorphic Computing"],
+                correct: 0,
+                explanation: "Komputasi Kuantum menggunakan qubit yang dapat bernilai 0 dan 1 sekaligus dalam bentuk superposisi."
+            },
+            {
+                id: 27,
+                category: "Internet of Things",
+                question: "Protokol nirkabel hemat daya yang banyak dipakai untuk komunikasi perangkat Smarthome IoT adalah...",
+                options: ["Zigbee / Bluetooth LE", "5G NSA", "Fiber Optik", "Satelit LEO"],
+                correct: 0,
+                explanation: "Zigbee dan Bluetooth Low Energy (BLE) mengonsumsi daya sangat hemat, cocok untuk sensor baterai kecil."
+            },
+            {
+                id: 28,
+                category: "Pengembangan Software",
+                question: "Istilah 'API' dalam dunia integrasi perangkat lunak dan AI merupakan singkatan dari...",
+                options: ["Application Programming Interface", "Automated Program Integration", "Advanced Processing Identification", "Algorithm Power Index"],
+                correct: 0,
+                explanation: "API adalah perantara berupa sekumpulan aturan yang memungkinkan dua aplikasi berkomunikasi satu sama lain."
+            },
+            {
+                id: 29,
+                category: "DevOps & Cloud",
+                question: "Platform teknologi yang digunakan untuk mengemas aplikasi beserta dependensinya ke dalam Container terisolasi adalah...",
+                options: ["Docker", "Git", "Linux Terminal", "VirtualBox"],
+                correct: 0,
+                explanation: "Docker memungkinkan developer membungkus aplikasi ke dalam container ringan agar bisa berjalan di mana saja."
+            },
+            {
+                id: 30,
+                category: "Cyber Security",
+                question: "Prinsip keamanan siber yang tidak memercayai siapa pun secara default ('Never Trust, Always Verify') dinamakan...",
+                options: ["Zero Trust Architecture", "Firewall Strategy", "Open Port System", "Single Sign-On (SSO)"],
+                correct: 0,
+                explanation: "Arsitektur Zero Trust mewajibkan verifikasi ketat pada setiap pengguna dan perangkat yang mencoba mengakses jaringan."
+            },
+            {
+                id: 31,
+                category: "Machine Learning",
+                question: "Fungsi matematika yang mengukur tingkat kesalahan (error) antara hasil prediksi AI dengan data asli dinamakan...",
+                options: ["Loss Function / Cost Function", "Activation Function", "Optimizer Function", "Gradient Scaling"],
+                correct: 0,
+                explanation: "Loss Function menghitung seberapa jauh presisi prediksi model dari target aktual untuk panduan koreksi bobot."
+            },
+            {
+                id: 32,
+                category: "Jaringan Komputer",
+                question: "Perangkat keras jaringan yang berfungsi mengarahkan lalu lintas paket data antar jaringan komputer berbeda dinamakan...",
+                options: ["Router", "Switch", "Hub", "Repeater"],
+                correct: 0,
+                explanation: "Router menentukan rute paket data jaringan (misalnya menghubungkan jaringan lokal LAN ke Internet)."
+            },
+            {
+                id: 33,
+                category: "Hardware Komputer",
+                question: "Memory hiper-cepat berkapasitas kecil yang terletak di dalam inti CPU untuk menyimpan data yang sering diakses adalah...",
+                options: ["Cache Memory (L1, L2, L3)", "RAM", "ROM", "NVMe SSD"],
+                correct: 0,
+                explanation: "CPU Cache berada sangat dekat dengan pemroses utama untuk memangkas waktu ambil data dari RAM."
+            },
+            {
+                id: 34,
+                category: "Big Data",
+                question: "Tiga dari lima kriteria '5V' dalam Big Data adalah Volume, Velocity, dan Variety. Dua 'V' sisanya adalah...",
+                options: ["Veracity dan Value", "Validity dan Vision", "Vector dan Virtual", "Variability dan Vigor"],
+                correct: 0,
+                explanation: "Prinsip 5V Big Data: Volume (jumlah), Velocity (kecepatan), Variety (keanekaragaman), Veracity (keakuratan), dan Value (nilai)."
+            },
+            {
+                id: 35,
+                category: "Konsep AI Masa Depan",
+                question: "Jenis AI hipotetis yang memiliki kemampuan pemahaman kecerdasan setara manusia di segudang domain umum dinamakan...",
+                options: ["AGI (Artificial General Intelligence)", "Narrow AI", "Supervised AI", "Weak AI"],
+                correct: 0,
+                explanation: "AGI merujuk pada level kecerdasan buatan serba bisa yang sanggup menalar beragam topik layaknya otak manusia."
+            },
+            {
+                id: 36,
+                category: "Sejarah Komputer",
+                question: "Tokoh matematikawan yang dikenal sebagai Bapak Ilmu Komputer Modern sekaligus pemecah kode Enigma saat Perang Dunia II adalah...",
+                options: ["Alan Turing", "Ada Lovelace", "John von Neumann", "Tim Berners-Lee"],
+                correct: 0,
+                explanation: "Alan Turing meletakkan fondasi ilmu komputer teoritis dan konsep kecerdasan mesin."
+            },
+            {
+                id: 37,
+                category: "Sejarah Komputer",
+                question: "Siapakah tokoh yang diakui sebagai Programmer Komputer Pertama di dunia karena menulis algoritma untuk Analytical Engine?",
+                options: ["Ada Lovelace", "Grace Hopper", "Margaret Hamilton", "Marie Curie"],
+                correct: 0,
+                explanation: "Ada Lovelace menulis catatan algoritma pertama yang dirancang untuk diolah oleh mesin hitung mekanis Charles Babbage."
+            },
+            {
+                id: 38,
+                category: "Telekomunikasi",
+                question: "Generasi ke-5 teknologi jaringan seluler broadband yang menawarkan latensi ultra-rendah dan kecepatan gigabit dinamakan...",
+                options: ["5G", "LTE Advanced", "Wi-Fi 6", "WiMAX"],
+                correct: 0,
+                explanation: "5G memberikan kecepatan transfer data jauh lebih tinggi serta respon latensi di bawah 5 milidetik."
+            },
+            {
+                id: 39,
+                category: "Sejarah Web",
+                question: "Siapakah penemu World Wide Web (WWW) pada tahun 1989 di laboratorium CERN?",
+                options: ["Tim Berners-Lee", "Steve Jobs", "Bill Gates", "Linus Torvalds"],
+                correct: 0,
+                explanation: "Tim Berners-Lee menciptakan protokol HTTP, bahasa HTML, serta URL pertama yang membentuk awal World Wide Web."
+            },
+            {
+                id: 40,
+                category: "Etika & AI",
+                question: "Prinsip etika AI yang menuntut agar keputusan yang diambil oleh model AI dapat ditelusuri dan dijelaskan rasionalitasnya dinamakan...",
+                options: ["Explainable AI (XAI)", "Black-Box AI", "Autonomous AI", "Closed-Source AI"],
+                correct: 0,
+                explanation: "Explainable AI (XAI) bertujuan membongkar fenomena 'kotak hitam' agar alur penalaran AI transparan dan dapat dipercaya."
+            }
+        ];
+
+        // QUIZ STATE VARIABLES
+        let currentQuestion = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let flaggedQuestions = new Array(quizData.length).fill(false);
+        let timerSeconds = 40 * 60; // 40 Menit
+        let timerInterval = null;
+        let quizSubmitted = false;
+
+        // INITIALIZE APP
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGridModal();
+        });
+
+        // START QUIZ
+        function startQuiz() {
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            document.getElementById('timer-badge').classList.remove('hidden');
+
+            startTimer();
+            loadQuestion(0);
+        }
+
+        // TIMER LOGIC
+        function startTimer() {
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerDisplay();
+
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Waktu ujian telah habis! Jawaban kamu akan disubmit otomatis.");
+                    submitQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timerSeconds / 60);
+            const seconds = timerSeconds % 60;
+            document.getElementById('timer-text').innerText = 
+                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        // LOAD QUESTION
+        function loadQuestion(index) {
+            currentQuestion = index;
+            const q = quizData[index];
+
+            // Update Header Info
+            document.getElementById('question-counter').innerText = `Soal ${index + 1} dari ${quizData.length}`;
+            document.getElementById('question-category').innerText = q.category;
+            document.getElementById('question-text').innerText = q.question;
+
+            // Update Progress Bar
+            const progressPercent = ((index + 1) / quizData.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+            // Update Flag Button
+            const flagBtn = document.getElementById('flag-btn');
+            if (flaggedQuestions[index]) {
+                flagBtn.className = "text-xs font-medium px-3 py-1 rounded-lg border transition-all flex items-center gap-1.5 border-amber-500/50 bg-amber-500/10 text-amber-400";
+            } else {
+                flagBtn.className = "text-xs font-medium px-3 py-1 rounded-lg border transition-all flex items-center gap-1.5 border-slate-700 text-slate-400 hover:text-amber-400";
+            }
+
+            // Render Options
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            const optionLabels = ['A', 'B', 'C', 'D'];
+
+            q.options.forEach((optionText, optIndex) => {
+                const isSelected = userAnswers[index] === optIndex;
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.onclick = () => selectOption(optIndex);
+                
+                let baseStyle = "w-full text-left p-4 rounded-xl border transition-all flex items-start gap-3.5 group cursor-pointer ";
+                if (isSelected) {
+                    baseStyle += "bg-indigo-600/20 border-indigo-500 text-white shadow-lg shadow-indigo-500/10";
+                } else {
+                    baseStyle += "bg-slate-900/50 border-slate-700/70 hover:border-slate-600 text-slate-200 hover:bg-slate-700/30";
+                }
+
+                btn.className = baseStyle;
+
+                btn.innerHTML = `
+                    <span class="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs flex-shrink-0 transition-colors ${isSelected ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-400 group-hover:bg-slate-700 group-hover:text-slate-200'}">
+                        ${optionLabels[optIndex]}
+                    </span>
+                    <span class="text-sm font-medium pt-0.5 leading-snug">${optionText}</span>
+                `;
+
+                optionsContainer.appendChild(btn);
+            });
+
+            // Navigation Buttons State
+            document.getElementById('prev-btn').disabled = (index === 0);
+            
+            if (index === quizData.length - 1) {
+                document.getElementById('next-btn').classList.add('hidden');
+                document.getElementById('submit-btn').classList.remove('hidden');
+            } else {
+                document.getElementById('next-btn').classList.remove('hidden');
+                document.getElementById('submit-btn').classList.add('hidden');
+            }
+
+            renderGridModal();
+        }
+
+        // SELECT OPTION
+        function selectOption(optionIndex) {
+            userAnswers[currentQuestion] = optionIndex;
+            loadQuestion(currentQuestion);
+        }
+
+        // TOGGLE FLAG/BOOKMARK
+        function toggleFlagCurrentQuestion() {
+            flaggedQuestions[currentQuestion] = !flaggedQuestions[currentQuestion];
+            loadQuestion(currentQuestion);
+        }
+
+        // PREV & NEXT
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                loadQuestion(currentQuestion - 1);
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < quizData.length - 1) {
+                loadQuestion(currentQuestion + 1);
+            }
+        }
+
+        // NAV MODAL GRID
+        function toggleGridModal() {
+            const modal = document.getElementById('grid-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        function renderGridModal() {
+            const gridContainer = document.getElementById('grid-buttons');
+            gridContainer.innerHTML = '';
+
+            quizData.forEach((_, idx) => {
+                const isCurrent = idx === currentQuestion;
+                const isAnswered = userAnswers[idx] !== null;
+                const isFlagged = flaggedQuestions[idx];
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.onclick = () => {
+                    loadQuestion(idx);
+                    toggleGridModal();
+                };
+
+                let style = "h-10 rounded-lg text-xs font-bold transition-all relative flex items-center justify-center ";
+
+                if (isCurrent) {
+                    style += "ring-2 ring-indigo-400 ring-offset-2 ring-offset-slate-800 ";
+                }
+
+                if (isFlagged) {
+                    style += "bg-amber-500 text-white ";
+                } else if (isAnswered) {
+                    style += "bg-indigo-600 text-white ";
+                } else {
+                    style += "bg-slate-700/60 hover:bg-slate-700 text-slate-300 ";
+                }
+
+                btn.className = style;
+                btn.innerText = idx + 1;
+
+                gridContainer.appendChild(btn);
+            });
+        }
+
+        // CONFIRM SUBMIT
+        function confirmSubmitQuiz() {
+            const unansweredCount = userAnswers.filter(ans => ans === null).length;
+            let msg = "Apakah Anda yakin ingin menyelesaikan quiz?";
+            if (unansweredCount > 0) {
+                msg = `Masih ada ${unansweredCount} soal yang belum dijawab. Yakin ingin mengumpulkan sekarang?`;
+            }
+
+            if (confirm(msg)) {
+                submitQuiz();
+            }
+        }
+
+        // SUBMIT & CALCULATE RESULT
+        function submitQuiz() {
+            clearInterval(timerInterval);
+            quizSubmitted = true;
+
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('timer-badge').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            let correctCount = 0;
+            let incorrectCount = 0;
+            let unansweredCount = 0;
+
+            quizData.forEach((q, idx) => {
+                const userAns = userAnswers[idx];
+                if (userAns === null) {
+                    unansweredCount++;
+                } else if (userAns === q.correct) {
+                    correctCount++;
+                } else {
+                    incorrectCount++;
+                }
+            });
+
+            const scorePercent = Math.round((correctCount / quizData.length) * 100);
+
+            // Update UI Stats
+            document.getElementById('final-score').innerText = `${scorePercent}%`;
+            document.getElementById('result-grade').innerText = `Skor Kamu: ${correctCount} / ${quizData.length}`;
+            document.getElementById('stat-correct').innerText = correctCount;
+            document.getElementById('stat-incorrect').innerText = incorrectCount;
+            document.getElementById('stat-unanswered').innerText = unansweredCount;
+
+            // Result Message Based on Score
+            const resultMsg = document.getElementById('result-message');
+            if (scorePercent >= 85) {
+                resultMsg.innerText = "Luar biasa! Pemahaman kamu di bidang Teknologi & Artificial Intelligence sangat matang!";
+            } else if (scorePercent >= 70) {
+                resultMsg.innerText = "Bagus sekali! Kamu memiliki wawasan teknologi yang solid. Pelajari lagi poin-poin yang keliru.";
+            } else if (scorePercent >= 50) {
+                resultMsg.innerText = "Hasil cukup baik. Tingkatkan lagi pemahamanmu seputar topik AI & Cloud Computing!";
+            } else {
+                resultMsg.innerText = "Jangan berkecil hati. Pelajari pembahasan soal di bawah ini dan coba lagi!";
+            }
+        }
+
+        // REVIEW MODE
+        function showReviewMode() {
+            const reviewContainer = document.getElementById('review-container');
+            const reviewList = document.getElementById('review-list');
+            
+            reviewContainer.classList.remove('hidden');
+            reviewList.innerHTML = '';
+
+            const optionLabels = ['A', 'B', 'C', 'D'];
+
+            quizData.forEach((q, idx) => {
+                const userAns = userAnswers[idx];
+                const isCorrect = userAns === q.correct;
+                const isUnanswered = userAns === null;
+
+                const card = document.createElement('div');
+                let cardBorder = isCorrect ? 'border-emerald-500/40 bg-emerald-950/10' : (isUnanswered ? 'border-amber-500/40 bg-amber-950/10' : 'border-rose-500/40 bg-rose-950/10');
+                
+                card.className = `p-5 rounded-2xl border ${cardBorder} space-y-3`;
+
+                let statusBadge = '';
+                if (isCorrect) {
+                    statusBadge = `<span class="text-xs px-2.5 py-1 bg-emerald-500/20 text-emerald-400 font-bold rounded-md flex items-center gap-1"><i class="fa-solid fa-check"></i> Benar</span>`;
+                } else if (isUnanswered) {
+                    statusBadge = `<span class="text-xs px-2.5 py-1 bg-amber-500/20 text-amber-400 font-bold rounded-md flex items-center gap-1"><i class="fa-solid fa-minus"></i> Tidak Dijawab</span>`;
+                } else {
+                    statusBadge = `<span class="text-xs px-2.5 py-1 bg-rose-500/20 text-rose-400 font-bold rounded-md flex items-center gap-1"><i class="fa-solid fa-xmark"></i> Salah</span>`;
+                }
+
+                let optionsHtml = '';
+                q.options.forEach((optText, optIdx) => {
+                    let optStyle = "text-xs p-2.5 rounded-lg border flex items-center gap-2 ";
+                    if (optIdx === q.correct) {
+                        optStyle += "bg-emerald-500/20 border-emerald-500/50 text-emerald-200 font-semibold";
+                    } else if (optIdx === userAns && !isCorrect) {
+                        optStyle += "bg-rose-500/20 border-rose-500/50 text-rose-200 font-semibold";
+                    } else {
+                        optStyle += "bg-slate-900/40 border-slate-800 text-slate-400";
+                    }
+
+                    optionsHtml += `
+                        <div class="${optStyle}">
+                            <span class="w-5 h-5 rounded flex items-center justify-center font-bold text-[10px] bg-slate-800">${optionLabels[optIdx]}</span>
+                            <span>${optText}</span>
+                            ${optIdx === q.correct ? '<i class="fa-solid fa-check text-emerald-400 ml-auto"></i>' : ''}
+                            ${optIdx === userAns && !isCorrect ? '<i class="fa-solid fa-xmark text-rose-400 ml-auto"></i>' : ''}
+                        </div>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between gap-2 border-b border-slate-700/50 pb-2">
+                        <span class="text-xs font-bold text-slate-400">Soal ${idx + 1} - ${q.category}</span>
+                        ${statusBadge}
+                    </div>
+                    <p class="text-sm font-semibold text-white">${q.question}</p>
+                    <div class="space-y-1.5">${optionsHtml}</div>
+                    <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 text-xs text-slate-300 leading-relaxed">
+                        <strong class="text-indigo-400 block mb-1">Pembahasan:</strong>
+                        ${q.explanation}
+                    </div>
+                `;
+
+                reviewList.appendChild(card);
+            });
+
+            // Scroll down to review section
+            reviewContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // RESTART QUIZ
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            flaggedQuestions = new Array(quizData.length).fill(false);
+            timerSeconds = 40 * 60;
+            quizSubmitted = false;
+
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('review-container').classList.add('hidden');
+            document.getElementById('welcome-screen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
+```
